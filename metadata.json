@@ -1,0 +1,6 @@
+{
+  "name": "ApexCare",
+  "description": "Modern and elegant dental clinic landing page featuring premium care services, active schedule appointments, and interactive assistant integrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Playfair Display", "Georgia", serif;
+  
+  --color-apex-blue: #3B5BDB;
+  --color-apex-navy: #1a1a2e;
+  --color-apex-lavender: #c5cae9;
+  --color-apex-gray: #666666;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-apex-navy);
+    background-color: #ffffff;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom CSS animations and utilities */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 6px -1px rgba(26, 26, 46, 0.1), 0 2px 4px -1px rgba(26, 26, 46, 0.06);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 10px 15px -3px rgba(26, 26, 46, 0.2), 0 4px 6px -2px rgba(26, 26, 46, 0.1);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Beautiful custom blur transitions */
+.navbar-blur {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
