@@ -791,7 +791,7 @@ export default function App() {
       <section 
         ref={featuresRef}
         id="features-section"
-        className="w-full bg-white py-20 px-6 md:px-10 overflow-hidden"
+        className="w-full bg-[#EBF5FF] py-20 px-6 md:px-10 overflow-hidden"
       >
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-stretch justify-between gap-6">
           
@@ -1017,7 +1017,7 @@ export default function App() {
       <section 
         ref={confidentRef}
         id="confident-smiles-section"
-        className="w-full bg-[#f5efe8]"
+        className="w-full bg-[#EBF5FF]"
       >
         {/* SECTION 1 — TOP HERO-STYLE CONTENT BLOCK */}
         <div className="max-w-[1200px] mx-auto py-16 md:py-24 px-6 md:px-10 relative overflow-hidden">
