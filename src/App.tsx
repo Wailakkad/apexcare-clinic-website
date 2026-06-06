@@ -1,4 +1,5 @@
 import { useState, useEffect, FormEvent, useRef } from "react";
+import { motion } from "framer-motion";
 import { 
   Smile, 
   Calendar, 
@@ -30,6 +31,7 @@ import {
 export default function App() {
   const [activeLink, setActiveLink] = useState("Home");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [bookingStep, setBookingStep] = useState(1);
   const [aboutInView, setAboutInView] = useState(false);
   const [committedInView, setCommittedInView] = useState(false);
@@ -41,6 +43,7 @@ export default function App() {
   const [contactInView, setContactInView] = useState(false);
   const [activeService, setActiveService] = useState(0); // Index of active service list row
   const [isConsultationClosed, setIsConsultationClosed] = useState(false);
+  const [footerEmail, setFooterEmail] = useState("");
   
   const aboutRef = useRef<HTMLDivElement>(null);
   const committedRef = useRef<HTMLDivElement>(null);
@@ -330,24 +333,25 @@ export default function App() {
         </div>
       </header>
 
-      {/* HERO SECTION CONTAINER */}
-      <main className="flex-grow pt-20 flex flex-col justify-between relative overflow-hidden">
-        
-        {/* Dynamic decorative backdrop circles to match photo */}
-        <div className="absolute top-24 left-12 w-96 h-96 rounded-full bg-[#f1f3ff]/50 blur-3xl -z-10" />
-        <div className="absolute bottom-10 left-1/3 w-80 h-80 rounded-full bg-[#e8eeff]/40 blur-3xl -z-10" />
+      {/* HERO SECTION */}
+      <main className="flex-grow pt-20 relative overflow-hidden">
 
-        <div className="max-w-7xl mx-auto w-full px-6 md:px-10 flex flex-col justify-between relative min-h-[calc(100vh-80px)] md:pb-6">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 w-full gap-8 relative py-8 md:py-16 items-center">
-            
-            {/* HERO TEXT CONTENT (Left Side — overlaid on gradient) */}
-            <div className="lg:col-span-6 flex flex-col justify-center select-none z-20 md:pr-4">
-              
-              {/* Badge text */}
-              <div 
-                id="hero-badge"
-                className={`flex items-center gap-1.5 self-start uppercase tracking-[0.25em] text-xs font-semibold text-apex-gray/90 bg-gray-100/80 px-3.5 py-1.5 rounded-full border border-gray-200/30 transition-all duration-700 ${
+        {/* Full-width hero with background image + gradient overlay */}
+        <section
+          className="relative min-h-[90vh] flex items-center w-full"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0) 80%), url("https://res.cloudinary.com/dhkyla1rv/image/upload/v1780654121/ChatGPT_Image_5_juin_2026_11_58_43.png")`,
+            backgroundSize: "cover",
+            backgroundPosition: "right center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <div className="max-w-[1200px] mx-auto w-full px-6 md:px-10 py-[120px]">
+            <div className="max-w-[600px]">
+
+              {/* Eyebrow label */}
+              <div
+                className={`inline-flex items-center gap-1.5 uppercase tracking-[0.15em] text-[12px] font-semibold text-apex-gray/90 bg-gray-100/80 px-3.5 py-1.5 rounded-full border border-gray-200/30 mb-6 transition-all duration-700 ${
                   isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
                 }`}
               >
@@ -355,50 +359,43 @@ export default function App() {
                 <span>#1 Dental Centre</span>
               </div>
 
-              {/* Main Headline (3 lines as specified) */}
-              <h1 
-                id="hero-headline"
-                className={`mt-6 text-4xl sm:text-5xl lg:text-[56px] leading-[1.12] font-sans font-extrabold text-apex-navy tracking-tight transition-all duration-755 delay-100`}
+              {/* Headline */}
+              <h1
+                className={`text-[36px] md:text-[64px] leading-[1.05] font-sans font-bold text-apex-navy tracking-tight transition-all duration-800 delay-100`}
                 style={{
                   transform: isLoaded ? "translateY(0)" : "translateY(24px)",
                   opacity: isLoaded ? 1 : 0,
                   transitionProperty: "transform, opacity",
-                  transitionDuration: "800ms"
                 }}
               >
                 <span className="block font-black">Brighten your</span>
-                
                 <span className="block mt-1">
                   smile with <span className="font-serif italic font-normal tracking-wide text-[#33469e]">expert</span>
                 </span>
-                
-                <span className="block font-serif italic font-normal text-apex-navy/95 mt-1 relative">
+                <span className="block font-serif italic font-normal text-apex-navy/95 mt-1">
                   dental care
-                  {/* Elegant decorative line under dental care */}
-                  <span className="absolute left-0 bottom-2 w-48 h-1 bg-apex-blue/15 rounded" />
                 </span>
               </h1>
 
-              {/* Added a subtle description that brings harmony and fills empty space cleanly */}
-              <p 
-                className="mt-6 text-base md:text-lg text-apex-gray max-w-lg leading-relaxed transition-all duration-800 delay-200"
+              {/* Paragraph */}
+              <p
+                className="mt-8 text-[18px] leading-[1.6] text-apex-gray max-w-[480px] transition-all duration-800 delay-200"
                 style={{
                   transform: isLoaded ? "translateY(0)" : "translateY(20px)",
                   opacity: isLoaded ? 1 : 0,
-                  transitionProperty: "transform, opacity"
+                  transitionProperty: "transform, opacity",
                 }}
               >
                 Experience world-class dental services tailored to your unique wellness. Our state-of-the-art clinic pairs innovative treatments with gentle, personalized attention.
               </p>
 
-              {/* Interactive CTA Button */}
-              <div 
-                id="hero-cta-button-container"
-                className="mt-8 transition-all duration-800 delay-300"
+              {/* CTA Button */}
+              <div
+                className="mt-10 transition-all duration-800 delay-300"
                 style={{
                   transform: isLoaded ? "translateY(0)" : "translateY(16px)",
                   opacity: isLoaded ? 1 : 0,
-                  transitionProperty: "transform, opacity"
+                  transitionProperty: "transform, opacity",
                 }}
               >
                 <button
@@ -406,12 +403,9 @@ export default function App() {
                     setBookingStep(1);
                     setIsModalOpen(true);
                   }}
-                  id="btn-hero-schedule"
-                  className="group cursor-pointer relative inline-flex items-center gap-5 justify-between py-4 pl-7 pr-4 rounded-full bg-apex-navy text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-apex-navy/20 hover:scale-[1.03] animate-pulse-subtle hover:animate-none border border-white/10"
+                  className="group cursor-pointer inline-flex items-center gap-5 py-[18px] px-8 rounded-[999px] bg-apex-navy text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-apex-navy/20 hover:scale-[1.03] border border-white/10"
                 >
                   <span className="text-base tracking-wide">Schedule your visit</span>
-                  
-                  {/* Small white circle with dark arrow ↗ */}
                   <span className="w-10 h-10 rounded-full bg-white text-apex-navy flex items-center justify-center transition-transform duration-300 group-hover:rotate-45 shadow-sm">
                     <ArrowUpRight className="w-5 h-5" strokeWidth={2.5} />
                   </span>
@@ -419,88 +413,24 @@ export default function App() {
               </div>
 
             </div>
-
-            {/* HERO IMAGE AND GRADIENT (Right Side / Full Overlaid area) */}
-            <div className="lg:col-span-6 relative w-full h-[320px] sm:h-[450px] lg:h-[520px] rounded-3xl overflow-hidden shadow-2xl shadow-apex-blue/5">
-              
-              {/* Background cover image as requested */}
-              <div 
-                id="hero-bg-image"
-                className="absolute inset-0 bg-cover bg-no-repeat transition-transform duration-10000 hover:scale-105"
-                style={{
-                  backgroundImage: `url("https://res.cloudinary.com/dhkyla1rv/image/upload/v1780654121/ChatGPT_Image_5_juin_2026_11_58_43.png")`,
-                  backgroundPosition: "center right",
-                }}
-              />
-
-              {/* CSS Gradient Overlay on the LEFT side ONLY (Copying the formula exactly as specified) */}
-              <div 
-                id="hero-gradient-overlay"
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 25%, rgba(255,255,255,0.4) 45%, rgba(255,255,255,0) 65%)"
-                }}
-              />
-
-              {/* Extra mobile gradient layer to guarantee absolute overlay contrast */}
-              <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent lg:hidden" />
-
-              {/* FLOATING ROTATING BADGE */}
-              <div 
-                id="floating-badge-container"
-                className="absolute left-6 bottom-16 lg:left-1/12 lg:bottom-1/3 transform -translate-x-1/2 translate-y-1/2 z-30 select-none hidden md:block"
-              >
-                <div className="relative w-[110px] h-[110px] bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 inline-block">
-                  
-                  {/* Rotating circular SVG text */}
-                  <div className="absolute inset-0 animate-spin-slow">
-                    <svg className="w-full h-full" viewBox="0 0 110 110">
-                      <defs>
-                        {/* Circular path centered at (55, 55) for the text to route around */}
-                        <path 
-                          id="badgeTextPath" 
-                          d="M 55, 55 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" 
-                          fill="none" 
-                        />
-                      </defs>
-                      <text fill="#666666" fontSize="7.8" fontWeight="800" letterSpacing="1.2">
-                        <textPath href="#badgeTextPath" startOffset="0%">
-                          YOUR DENTAL ASSISTANT • YOUR DENTAL ASSISTANT • 
-                        </textPath>
-                      </text>
-                    </svg>
-                  </div>
-
-                  {/* Circular dashed light blue border inside */}
-                  <div className="absolute inset-[10px] rounded-full border border-dashed border-apex-blue/35" />
-
-                  {/* Shaded inner circle for the letter 'M' */}
-                  <div className="w-[44px] h-[44px] rounded-full bg-gradient-to-tr from-gray-50 to-white flex items-center justify-center shadow-sm z-10 border border-gray-100">
-                    <span className="font-sans font-black text-lg text-apex-blue tracking-tighter">M</span>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-
           </div>
+        </section>
 
-          {/* STATS CARDS SECTION (Bottom of hero with delay staggered animation) */}
-          <div 
-            id="stats-cards-section"
-            className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-8 lg:py-4 z-20 relative max-lg:mt-4"
-          >
-            
+        {/* STATS CARDS */}
+        <div
+          id="stats-cards-section"
+          className="w-full max-w-7xl mx-auto px-6 md:px-10 pb-6 -mt-20 relative z-20"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-8 lg:py-4">
+
             {/* Card 1 */}
-            <div 
+            <div
               id="card-caring-dentists"
               className="bg-white rounded-2xl p-5 border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-up select-none"
               style={{ animationDelay: "0ms" }}
             >
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl bg-apex-blue/10 flex items-center justify-center text-apex-blue shrink-0">
-                  {/* Pristine Tooth Dental Care SVG Icon */}
                   <svg viewBox="0 0 24 24" className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2A10 10 0 0 1 22 12c-2 0-3-1-3-3s.5-2-.5-4-3 .5-4-.5c0 1.5-.5 3.5-2.5 3.5S10 6 10 4.5c-1 1-3 .5-4 .5-1 2-.5 4-.5 4s-1 3-3 3a10 10 0 0 1 10-10Z" opacity="0.15" />
                     <path d="M12.1 22c-.6 0-1.2-.2-1.6-.6-.5-.5-.8-1.1-.9-1.8l-.5-3.3c-.1-.7-.4-1.3-.9-1.8l-1.3-1.3c-.6-.6-.9-1.4-.9-2.2V6.6c0-1.8 1.4-3.2 3.2-3.2h2.2c1.8 0 3.2 1.4 3.2 3.2v6.4c0 .8-.3 1.6-.9 2.2l-1.3 1.3c-.5.5-.8 1.1-.9 1.8l-.5 3.3c-.1.7-.4 1.3-.9 1.8-.4.4-1 .6-1.6.6ZM8.5 6.6v6.4a2 2 0 0 0 .6 1.4l1.3 1.3c.7.7 1.1 1.6 1.2 2.5l.5 3.3q.05.3.2.4a.5.5 0 0 0 .7 0q.15-.1.2-.4l.5-3.3c.1-.9.5-1.8 1.2-2.5l1.3-1.3a2 2 0 0 0 .6-1.4V6.6a1.2 1.2 0 0 0-1.2-1.2h-2.2c-.7 0-1.3.5-1.3 1.2Z" />
@@ -513,18 +443,15 @@ export default function App() {
               </div>
             </div>
 
-            {/* Card 2: Empty decorative card with a beautiful Teal/Blue gradient theme placeholder & tool vector */}
-            <div 
+            {/* Card 2 */}
+            <div
               id="card-decorative-tool"
               className="bg-white rounded-2xl p-5 border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-up select-none overflow-hidden relative group"
               style={{ animationDelay: "150ms" }}
             >
-              {/* Teal/blue horizontal high contrast background */}
               <div className="absolute inset-0 bg-gradient-to-tr from-[#3b82f6] via-[#10b981] to-[#6ee7b7] opacity-10 group-hover:opacity-15 transition-opacity" />
-              
               <div className="flex items-center justify-between h-full relative z-10 w-full">
                 <div className="flex items-center gap-4">
-                  {/* Distinct dental mirror/instrument logo inside gradient circle */}
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#3B5BDB] to-[#10b981] text-white flex items-center justify-center shadow-md">
                     <span>🦷</span>
                   </div>
@@ -535,7 +462,6 @@ export default function App() {
                     </span>
                   </div>
                 </div>
-                {/* Shiny graphical dentist outline inside gradient */}
                 <div className="transform rotate-12 text-apex-blue/20 group-hover:scale-110 transition-transform">
                   <svg viewBox="0 0 24 24" className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1.2">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
@@ -545,7 +471,7 @@ export default function App() {
             </div>
 
             {/* Card 3 */}
-            <div 
+            <div
               id="card-join-members"
               className="bg-white rounded-2xl p-5 border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-up select-none"
               style={{ animationDelay: "300ms" }}
@@ -562,7 +488,7 @@ export default function App() {
             </div>
 
             {/* Card 4 */}
-            <div 
+            <div
               id="card-best-dentist"
               className="bg-white rounded-2xl p-5 border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-slide-up select-none"
               style={{ animationDelay: "450ms" }}
@@ -584,7 +510,6 @@ export default function App() {
             </div>
 
           </div>
-
         </div>
 
       </main>
@@ -684,7 +609,7 @@ export default function App() {
               className="relative w-full max-w-[420px] h-[320px] rounded-3xl overflow-hidden z-10 shadow-xl bg-gradient-to-tr from-[#e8eaf6] via-[#c5cae9] to-[#9fa8da] border border-white/20 group cursor-pointer"
             >
               <img 
-                src="https://res.cloudinary.com/dhkyla1rv/image/upload/v1780654121/ChatGPT_Image_5_juin_2026_11_58_43.png" 
+                src="/ABOUT METIER img.jpeg" 
                 alt="ApexCare Doctor Patient Care" 
                 className="w-full h-full object-cover object-center top block transition-transform duration-700 group-hover:scale-105"
               />
@@ -936,19 +861,23 @@ export default function App() {
             }`}
             style={{ transitionDelay: "200ms" }}
           >
-            <div 
-              className="bg-[#1a1a2e] rounded-[24px] overflow-hidden relative w-full h-full min-h-[320px] md:min-h-[420px] flex flex-col justify-end p-5 shadow-lg hover:scale-[1.01] transition-transform duration-300 group"
+            <div
+              onClick={() => {
+                setBookingStep(1);
+                setIsModalOpen(true);
+              }}
+              className="bg-[#1a1a2e] rounded-[24px] overflow-hidden relative w-full h-full min-h-[320px] md:min-h-[420px] flex flex-col justify-end p-5 shadow-lg hover:scale-[1.01] transition-transform duration-300 group cursor-pointer"
             >
               <img 
                 src="/online-consulting image.jpeg" 
                 alt="Doctor Video consultation" 
-                className="absolute inset-0 w-full h-full object-cover rounded-[24px] opacity-85 transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover rounded-[24px] transition-transform duration-700 group-hover:scale-105"
               />
               {/* Backlight overlay */}
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
 
               {/* Small Video Thumbnail top-left */}
-              <div className="absolute top-4 left-4 w-[72px] h-[56px] rounded-xl bg-[#c5cae9] border-[2px] border-white/30 overflow-hidden shadow-md z-10">
+              <div className="absolute top-4 left-4 w-[72px] h-[56px] rounded-xl bg-[#c5cae9] border-[2px] border-white/30 overflow-hidden shadow-md z-10 pointer-events-none">
                 <img 
                   src="https://i.pravatar.cc/100?img=47" 
                   alt="Patient Video Feed" 
@@ -957,32 +886,28 @@ export default function App() {
               </div>
 
               {/* Timer Badge top-center */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md rounded-full py-1 px-3 flex items-center gap-2 border border-white/10 z-10">
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md rounded-full py-1 px-3 flex items-center gap-2 border border-white/10 z-10 pointer-events-none">
                 <div className="w-2 h-2 rounded-full bg-[#ef4444] animate-pulse" />
                 <span className="text-white text-xs font-medium tracking-tight whitespace-nowrap">1h 15 min</span>
               </div>
 
               {/* Call Control Buttons bottom-center */}
-              <div className="flex gap-3 items-center justify-center relative z-10 w-full pb-2">
+              <div className="flex gap-3 items-center justify-center relative z-10 w-full pb-2 pointer-events-none">
                 
                 {/* Button 1 - Microphone Toggle */}
-                <span className="w-10 h-10 rounded-full bg-white/90 text-slate-800 flex items-center justify-center hover:bg-white active:scale-95 transition-all shadow-md cursor-pointer">
+                <span className="w-10 h-10 rounded-full bg-white/90 text-slate-800 flex items-center justify-center hover:bg-white active:scale-95 transition-all shadow-md cursor-default">
                   <Mic className="w-4.5 h-4.5" />
                 </span>
 
                 {/* Button 2 - End Call (Red) */}
                 <span 
-                  onClick={() => {
-                    setBookingStep(1);
-                    setIsModalOpen(true);
-                  }}
-                  className="w-12 h-12 rounded-full bg-[#ef4444] text-white flex items-center justify-center hover:bg-[#ef4444]/90 active:scale-90 transition-all shadow-lg cursor-pointer"
+                  className="w-12 h-12 rounded-full bg-[#ef4444] text-white flex items-center justify-center shadow-lg cursor-default"
                 >
                   <PhoneOff className="w-5 h-5" />
                 </span>
 
                 {/* Button 3 - Video Feed Camera Toggle */}
-                <span className="w-10 h-10 rounded-full bg-white/90 text-slate-800 flex items-center justify-center hover:bg-white active:scale-95 transition-all shadow-md cursor-pointer">
+                <span className="w-10 h-10 rounded-full bg-white/90 text-slate-800 flex items-center justify-center hover:bg-white active:scale-95 transition-all shadow-md cursor-default">
                   <Video className="w-4.5 h-4.5" />
                 </span>
 
@@ -1194,10 +1119,18 @@ export default function App() {
               </div>
               
               {/* Small vertical video thumbnail card positioned bottom right (on desktop) */}
-              <div className="static mt-6 sm:mt-8 md:absolute md:-bottom-20 md:right-16 md:mt-0 w-[200px] h-[240px] rounded-[18px] overflow-hidden shadow-xl bg-slate-800 transition-all duration-300 hover:scale-105 group cursor-pointer z-10">
-                <img 
-                  src="https://images.unsplash.com/photo-1606813909024-75d9e42d0d4f" 
-                  alt="Doctor visual thumbnail info" 
+              <div
+                onClick={() => setIsVideoModalOpen(true)}
+                className="static mt-6 sm:mt-8 md:absolute md:-bottom-20 md:right-16 md:mt-0 w-[200px] h-[240px] rounded-[18px] overflow-hidden shadow-xl bg-slate-800 transition-all duration-300 hover:scale-105 group cursor-pointer z-10"
+              >
+                <video
+                  src="https://res.cloudinary.com/dhkyla1rv/video/upload/v1780738055/clinic.mp4"
+                  poster="/online-consulting image.jpeg"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
                   className="w-full h-full object-cover opacity-90"
                 />
                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
@@ -1554,45 +1487,41 @@ export default function App() {
       </section>
 
       {/* SECTION: OUR MEDICAL SERVICES */}
-      <section 
+      <section
         ref={medicalServicesRef}
         id="medical-services-section"
         className="w-full bg-[#eef2f7]"
       >
-        <div className="max-w-[1200px] mx-auto py-16 md:py-24 px-6 md:px-10">
-          
-          {/* HEADER ROW */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
-            
-            {/* Left side */}
-            <div 
-              className={`text-left transition-all duration-[750ms] ${
-                medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-            >
-              <h2 className="text-[#111827] font-sans font-[800] text-3xl sm:text-[42px] leading-[1.2] tracking-tight relative inline-flex items-center">
-                Our medical services 
-                <span className="text-xs sm:text-sm font-medium text-[#6b7280] ml-3.5 mt-2">
-                  ( What you get )
-                </span>
+        <div className="max-w-[1280px] mx-auto px-6 md:px-10 py-[120px]">
+
+          {/* HEADER */}
+          <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-[60px]">
+
+            {/* Left */}
+            <div className={`text-left transition-all duration-[750ms] ${
+              medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}>
+              <h2 className="text-[48px] font-bold text-apex-navy leading-[1.1] tracking-tight">
+                Our medical services
               </h2>
+              <p className="text-[15px] text-apex-gray mt-2 font-medium">
+                (What you get)
+              </p>
             </div>
 
-            {/* Right side */}
-            <div 
-              className={`flex flex-col items-start md:items-end text-left md:text-right transition-all duration-[750ms] delay-100 ${
-                medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-            >
-              <p className="text-[13px] text-[#6b7280] max-w-[320px] font-medium leading-relaxed">
-                We provide a full range of medical services — from consultation to diagnosis and treatment.
+            {/* Right */}
+            <div className={`flex flex-col items-start md:items-end text-left md:text-right max-w-[380px] transition-all duration-[750ms] delay-100 ${
+              medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}>
+              <p className="text-[15px] text-apex-gray leading-relaxed">
+                We provide a full range of medical services — from consultation to diagnosis and treatment, all in one place.
               </p>
-              <button 
+              <button
                 onClick={() => {
                   setBookingStep(1);
                   setIsModalOpen(true);
                 }}
-                className="text-[#3B5BDB] hover:text-[#5C7CFA] text-[13px] font-semibold mt-2.5 transition-colors cursor-pointer inline-flex items-center gap-1 group self-start md:self-end"
+                className="text-apex-blue hover:text-blue-600 text-[15px] font-semibold mt-3 transition-colors cursor-pointer inline-flex items-center gap-1 group self-start md:self-end"
               >
                 <span>See all services</span>
                 <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
@@ -1601,172 +1530,174 @@ export default function App() {
 
           </div>
 
-          {/* SERVICES GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Card 1 */}
-            <div 
-              className={`bg-white rounded-[20px] p-6 relative min-h-[180px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 hover:shadow-[0_15px_35px_rgba(0,0,0,0.09)] transition-all duration-300 text-left flex flex-col justify-between group ${
+          {/* CARDS GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {/* Card 1: Family medicine */}
+            <div
+              className={`group relative bg-white rounded-[24px] p-8 overflow-hidden transition-all duration-[400ms] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(37,99,235,0.25)] ${
                 medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: "100ms" }}
             >
-              <span className="absolute top-5 right-5 text-gray-200 text-6xl font-extrabold select-none pointer-events-none group-hover:text-gray-300 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2563eb] to-[#1e40af] opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms]" />
+              <span className="absolute top-4 right-6 text-[80px] font-bold text-gray-200/50 group-hover:text-white/10 transition-colors duration-[400ms] select-none pointer-events-none leading-none">
                 01
               </span>
-              <div>
-                <h4 className="font-bold text-lg text-slate-900 mb-2">Family medicine</h4>
-                <p className="text-xs text-[#6b7280] leading-relaxed max-w-[80%]">
-                  Comprehensive medical care for individuals and families.
+              <div className="relative z-10 h-full flex flex-col">
+                <h4 className="text-[20px] font-semibold text-apex-navy group-hover:text-white transition-colors duration-[400ms]">
+                  Family medicine
+                </h4>
+                <p className="text-[15px] text-apex-gray group-hover:text-white/80 mt-3 leading-[1.6] transition-colors duration-[400ms]">
+                  Comprehensive medical care for individuals and families, with a focus on preventive health.
                 </p>
-              </div>
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-50">
-                <button 
-                  onClick={() => {
-                    setBookingStep(1);
-                    setIsModalOpen(true);
-                  }}
-                  className="text-[#3B5BDB] hover:text-[#5C7CFA] text-xs font-semibold cursor-pointer text-left"
-                >
-                  Make an appointment
-                </button>
-                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Price</span>
+                <div className="flex items-center justify-between mt-8">
+                  <button
+                    onClick={() => { setBookingStep(1); setIsModalOpen(true); }}
+                    className="text-[13px] font-semibold text-apex-blue group-hover:text-white cursor-pointer text-left transition-colors duration-[400ms]"
+                  >
+                    Make an appointment
+                  </button>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-apex-blue/70 group-hover:text-white/70 transition-colors duration-[400ms]">
+                    Price
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Card 2 (FEATURED BLUE CARD) */}
-            <div 
-              className={`bg-gradient-to-br from-[#3B5BDB] to-[#1e40af] text-white rounded-[20px] p-6 relative min-h-[180px] shadow-[0_10px_30px_rgba(59,91,219,0.25)] hover:-translate-y-1.5 hover:shadow-[0_15px_35px_rgba(59,91,219,0.35)] transition-all duration-300 text-left overflow-hidden flex flex-col justify-center items-center text-center ${
+            {/* Featured Blue Card (center top) */}
+            <div
+              className={`relative bg-gradient-to-br from-[#2563eb] to-[#1e40af] text-white rounded-[24px] p-8 overflow-hidden flex flex-col items-center justify-center text-center min-h-[280px] ${
                 medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: "200ms" }}
             >
-              {/* Large abstract circles overlay */}
-              <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-white/5 pointer-events-none" />
-              
-              <div className="relative z-10 p-4">
-                <span className="text-2xl font-black tracking-widest text-cyan-200 uppercase font-sans">
+              <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full border border-white/10 pointer-events-none" />
+              <div className="relative z-10">
+                <h3 className="text-2xl font-black tracking-widest uppercase">
                   SalvaMedic
-                </span>
-                <p className="text-xs text-white/90 font-medium leading-relaxed mt-2.5 max-w-[210px] mx-auto">
+                </h3>
+                <p className="text-sm text-white/80 font-medium leading-relaxed mt-3 max-w-[220px] mx-auto">
                   Professional and diagnostic treatment with modern care
                 </p>
               </div>
             </div>
 
-            {/* Card 3 */}
-            <div 
-              className={`bg-white rounded-[20px] p-6 relative min-h-[180px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 hover:shadow-[0_15px_35px_rgba(0,0,0,0.09)] transition-all duration-300 text-left flex flex-col justify-between group ${
+            {/* Card 2: Pediatrics */}
+            <div
+              className={`group relative bg-white rounded-[24px] p-8 overflow-hidden transition-all duration-[400ms] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(37,99,235,0.25)] ${
                 medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: "300ms" }}
             >
-              <span className="absolute top-5 right-5 text-gray-200 text-6xl font-extrabold select-none pointer-events-none group-hover:text-gray-300 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2563eb] to-[#1e40af] opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms]" />
+              <span className="absolute top-4 right-6 text-[80px] font-bold text-gray-200/50 group-hover:text-white/10 transition-colors duration-[400ms] select-none pointer-events-none leading-none">
                 02
               </span>
-              <div>
-                <h4 className="font-bold text-lg text-slate-900 mb-2">Pediatrics</h4>
-                <p className="text-xs text-[#6b7280] leading-relaxed max-w-[80%]">
-                  Caring for children’s health from infancy through adolescence.
+              <div className="relative z-10 h-full flex flex-col">
+                <h4 className="text-[20px] font-semibold text-apex-navy group-hover:text-white transition-colors duration-[400ms]">
+                  Pediatrics
+                </h4>
+                <p className="text-[15px] text-apex-gray group-hover:text-white/80 mt-3 leading-[1.6] transition-colors duration-[400ms]">
+                  Caring for children's health from infancy through adolescence with gentle expertise.
                 </p>
-              </div>
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-50">
-                <button 
-                  onClick={() => {
-                    setBookingStep(1);
-                    setIsModalOpen(true);
-                  }}
-                  className="text-[#3B5BDB] hover:text-[#5C7CFA] text-xs font-semibold cursor-pointer text-left"
-                >
-                  Make an appointment
-                </button>
-                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Price</span>
+                <div className="flex items-center justify-between mt-8">
+                  <button
+                    onClick={() => { setBookingStep(1); setIsModalOpen(true); }}
+                    className="text-[13px] font-semibold text-apex-blue group-hover:text-white cursor-pointer text-left transition-colors duration-[400ms]"
+                  >
+                    Make an appointment
+                  </button>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-apex-blue/70 group-hover:text-white/70 transition-colors duration-[400ms]">
+                    Price
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Card 4 */}
-            <div 
-              className={`bg-white rounded-[20px] p-6 relative min-h-[180px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 hover:shadow-[0_15px_35px_rgba(0,0,0,0.09)] transition-all duration-300 text-left flex flex-col justify-between group ${
+            {/* Card 3: Cardiology */}
+            <div
+              className={`group relative bg-white rounded-[24px] p-8 overflow-hidden transition-all duration-[400ms] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(37,99,235,0.25)] ${
                 medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: "400ms" }}
             >
-              <span className="absolute top-5 right-5 text-gray-200 text-6xl font-extrabold select-none pointer-events-none group-hover:text-gray-300 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2563eb] to-[#1e40af] opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms]" />
+              <span className="absolute top-4 right-6 text-[80px] font-bold text-gray-200/50 group-hover:text-white/10 transition-colors duration-[400ms] select-none pointer-events-none leading-none">
                 03
               </span>
-              <div>
-                <h4 className="font-bold text-lg text-slate-900 mb-2">Cardiology</h4>
-                <p className="text-xs text-[#6b7280] leading-relaxed max-w-[80%]">
-                  Diagnosis and treatment of cardiovascular diseases.
+              <div className="relative z-10 h-full flex flex-col">
+                <h4 className="text-[20px] font-semibold text-apex-navy group-hover:text-white transition-colors duration-[400ms]">
+                  Cardiology
+                </h4>
+                <p className="text-[15px] text-apex-gray group-hover:text-white/80 mt-3 leading-[1.6] transition-colors duration-[400ms]">
+                  Diagnosis and treatment of cardiovascular diseases with advanced technology.
                 </p>
-              </div>
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-50">
-                <button 
-                  onClick={() => {
-                    setBookingStep(1);
-                    setIsModalOpen(true);
-                  }}
-                  className="text-[#3B5BDB] hover:text-[#5C7CFA] text-xs font-semibold cursor-pointer text-left"
-                >
-                  Make an appointment
-                </button>
-                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Price</span>
+                <div className="flex items-center justify-between mt-8">
+                  <button
+                    onClick={() => { setBookingStep(1); setIsModalOpen(true); }}
+                    className="text-[13px] font-semibold text-apex-blue group-hover:text-white cursor-pointer text-left transition-colors duration-[400ms]"
+                  >
+                    Make an appointment
+                  </button>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-apex-blue/70 group-hover:text-white/70 transition-colors duration-[400ms]">
+                    Price
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Card 5 */}
-            <div 
-              className={`bg-white rounded-[20px] p-6 relative min-h-[180px] shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 hover:shadow-[0_15px_35px_rgba(0,0,0,0.09)] transition-all duration-300 text-left flex flex-col justify-between group ${
+            {/* Card 4: Ultrasound & Lab */}
+            <div
+              className={`group relative bg-white rounded-[24px] p-8 overflow-hidden transition-all duration-[400ms] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(37,99,235,0.25)] ${
                 medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: "500ms" }}
             >
-              <span className="absolute top-5 right-5 text-gray-200 text-6xl font-extrabold select-none pointer-events-none group-hover:text-gray-300 transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2563eb] to-[#1e40af] opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms]" />
+              <span className="absolute top-4 right-6 text-[80px] font-bold text-gray-200/50 group-hover:text-white/10 transition-colors duration-[400ms] select-none pointer-events-none leading-none">
                 04
               </span>
-              <div>
-                <h4 className="font-bold text-lg text-slate-900 mb-2">Ultrasound & Lab</h4>
-                <p className="text-xs text-[#6b7280] leading-relaxed max-w-[80%]">
-                  Fast and accurate tests, modern laboratory diagnostics.
+              <div className="relative z-10 h-full flex flex-col">
+                <h4 className="text-[20px] font-semibold text-apex-navy group-hover:text-white transition-colors duration-[400ms]">
+                  Ultrasound & Lab
+                </h4>
+                <p className="text-[15px] text-apex-gray group-hover:text-white/80 mt-3 leading-[1.6] transition-colors duration-[400ms]">
+                  Fast and accurate tests with modern laboratory diagnostics and imaging.
                 </p>
-              </div>
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-50">
-                <button 
-                  onClick={() => {
-                    setBookingStep(1);
-                    setIsModalOpen(true);
-                  }}
-                  className="text-[#3B5BDB] hover:text-[#5C7CFA] text-xs font-semibold cursor-pointer text-left"
-                >
-                  Make an appointment
-                </button>
-                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Price</span>
+                <div className="flex items-center justify-between mt-8">
+                  <button
+                    onClick={() => { setBookingStep(1); setIsModalOpen(true); }}
+                    className="text-[13px] font-semibold text-apex-blue group-hover:text-white cursor-pointer text-left transition-colors duration-[400ms]"
+                  >
+                    Make an appointment
+                  </button>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-apex-blue/70 group-hover:text-white/70 transition-colors duration-[400ms]">
+                    Price
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Card 6: Image Card */}
-            <div 
-              className={`rounded-[20px] overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1.5 hover:shadow-[0_15px_35px_rgba(0,0,0,0.12)] transition-all duration-300 group min-h-[180px] cursor-pointer ${
+            {/* Large Image Card */}
+            <div
+              className={`relative rounded-[24px] overflow-hidden min-h-[400px] lg:min-h-[500px] group cursor-pointer ${
                 medicalServicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: "600ms" }}
-              onClick={() => {
-                setBookingStep(1);
-                setIsModalOpen(true);
-              }}
+              onClick={() => { setBookingStep(1); setIsModalOpen(true); }}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1588776814546-ec7e9c8a53c7" 
-                alt="Clinic internal equipment checkup" 
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 absolute inset-0"
+              <img
+                src="/dental-1.jpeg"
+                alt="Clinic equipment"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-transparent group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
 
           </div>
-
         </div>
       </section>
 
@@ -2141,149 +2072,307 @@ export default function App() {
         </div>
       </section>
 
-      {/* SECTION 2: MODERN PROFESSIONAL FOOTER */}
-      <footer 
+      {/* SECTION 2: PREMIUM DARK NEWSLETTER FOOTER */}
+      <motion.footer
         id="modern-professional-footer"
-        className="w-full bg-[#0f172a] text-slate-300 pt-20 pb-8 px-6 md:px-10"
+        className="relative w-full bg-[#0B0F14] text-slate-300 overflow-hidden"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
       >
-        <div className="max-w-[1200px] mx-auto">
-          
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
-            
-            {/* COLUMN 1 — BRAND */}
-            <div className="md:col-span-5 flex flex-col items-start text-left">
+        {/* Large background brand watermark */}
+        <motion.div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[200px] sm:text-[300px] font-black text-white/5 leading-none pointer-events-none select-none z-0 whitespace-nowrap"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.05 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          animate={{ x: [0, 10, 0] }}
+          style={{ translateX: "-50%" }}
+        >
+          SalvaMedic
+        </motion.div>
+
+        <div className="relative z-10 max-w-[1280px] mx-auto px-6 md:px-20 pt-[120px] pb-[60px]">
+
+          {/* SECTION 1 — NEWSLETTER CTA */}
+          <div className="flex flex-col items-center text-center">
+            <motion.h2
+              className="text-[48px] leading-[1.1] font-bold text-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              Stay Ahead with Financial
+            </motion.h2>
+            <motion.h2
+              className="text-[48px] leading-[1.1] font-serif italic text-white"
+              initial={{ opacity: 0, filter: "blur(6px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            >
+              Insights and Updates
+            </motion.h2>
+            <motion.p
+              className="text-[#9CA3AF] text-base max-w-[520px] mx-auto mt-6 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
+            >
+              Subscribe to receive exclusive health insights, clinic updates, and special offers straight to your inbox.
+            </motion.p>
+
+            {/* Email form */}
+            <motion.form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setFooterEmail("");
+              }}
+              className="flex items-center justify-center gap-4 mt-8 w-full max-w-[520px]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}
+            >
+              <input
+                type="email"
+                value={footerEmail}
+                onChange={(e) => setFooterEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="w-[320px] h-14 bg-[#1F2937] rounded-full px-5 text-white text-sm outline-none border-none placeholder:text-[#6B7280] focus:ring-2 focus:ring-[#3B5BDB]/50 focus:shadow-[0_0_0_3px_rgba(59,91,219,0.15)] transition-all duration-300 ease-out"
+              />
+              <motion.button
+                type="submit"
+                className="h-14 px-7 bg-[#3B5BDB] hover:bg-[#2e4abf] text-white font-medium rounded-full whitespace-nowrap cursor-pointer"
+                whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(59,91,219,0.3)" }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                Subscribe
+              </motion.button>
+            </motion.form>
+          </div>
+
+          {/* SECTION 2 — DIVIDER */}
+          <motion.div
+            className="w-full h-px bg-white/10 mt-20 mb-16 origin-left"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+          />
+
+          {/* SECTION 3 — LINKS GRID */}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } }
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+
+            {/* Column 1 — Brand */}
+            <motion.div
+              className="flex flex-col items-start text-left"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+              }}
+            >
               <span className="font-sans font-[800] text-[22px] text-white tracking-widest mb-4">
                 SalvaMedic
               </span>
-              <p className="text-sm text-slate-400 font-medium leading-relaxed max-w-[320px] mb-6">
-                SalvaMedic provides advanced diagnostic treatments and comprehensive healthcare solutions centered around safety, clinical excellence, and state-of-the-art diagnostics.
+              <p className="text-sm text-[#9CA3AF] leading-relaxed max-w-[260px]">
+                Advanced diagnostic treatments and comprehensive healthcare solutions centered around safety and clinical excellence.
               </p>
-              
-              {/* Social icons row */}
-              <div className="flex items-center gap-3">
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#3B5BDB] flex items-center justify-center text-slate-300 hover:text-white transition-all duration-300"
-                >
-                  <Facebook className="w-4.5 h-4.5" />
-                </a>
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#3B5BDB] flex items-center justify-center text-slate-300 hover:text-white transition-all duration-300"
-                >
-                  <Instagram className="w-4.5 h-4.5" />
-                </a>
-                <a 
-                  href="https://linkedin.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#3B5BDB] flex items-center justify-center text-slate-300 hover:text-white transition-all duration-300"
-                >
-                  <Linkedin className="w-4.5 h-4.5" />
-                </a>
+              {/* Social icons */}
+              <div className="flex items-center gap-3 mt-6">
+                {[
+                  { Icon: Facebook, href: "https://facebook.com" },
+                  { Icon: Instagram, href: "https://instagram.com" },
+                  { Icon: Linkedin, href: "https://linkedin.com" }
+                ].map(({ Icon, href }) => (
+                  <motion.a
+                    key={href}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-300"
+                    whileHover={{ scale: 1.08, backgroundColor: "rgba(59,91,219,1)" }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  >
+                    <Icon className="w-4.5 h-4.5" />
+                  </motion.a>
+                ))}
               </div>
-            </div>
+            </motion.div>
 
-            {/* COLUMN 2 — SERVICES */}
-            <div className="md:col-span-2 md:col-start-7 flex flex-col items-start text-left">
-              <h4 className="text-white text-xs font-bold tracking-wider uppercase mb-5">
+            {/* Column 2 — Services */}
+            <motion.div
+              className="flex flex-col items-start text-left"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+              }}
+            >
+              <h4 className="text-[12px] font-semibold tracking-[0.15em] uppercase text-[#9CA3AF] mb-6">
                 Services
               </h4>
-              <ul className="space-y-3">
-                <li>
-                  <a href="#medical-services-section" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                    Family medicine
-                  </a>
-                </li>
-                <li>
-                  <a href="#medical-services-section" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                    Cardiology
-                  </a>
-                </li>
-                <li>
-                  <a href="#medical-services-section" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                    Pediatrics
-                  </a>
-                </li>
-                <li>
-                  <a href="#medical-services-section" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                    Diagnostics
-                  </a>
-                </li>
+              <ul className="flex flex-col items-start gap-3">
+                {["Family medicine", "Cardiology", "Pediatrics", "Diagnostics"].map((item) => (
+                  <motion.li
+                    key={item}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <motion.a
+                      href="#medical-services-section"
+                      className="text-sm text-slate-300 inline-block cursor-pointer"
+                      whileHover={{ x: 2, color: "#ffffff" }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                    >
+                      {item}
+                    </motion.a>
+                  </motion.li>
+                ))}
               </ul>
-            </div>
+            </motion.div>
 
-            {/* COLUMN 3 — COMPANY */}
-            <div className="md:col-span-2 flex flex-col items-start text-left">
-              <h4 className="text-white text-xs font-bold tracking-wider uppercase mb-5">
+            {/* Column 3 — Company */}
+            <motion.div
+              className="flex flex-col items-start text-left"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+              }}
+            >
+              <h4 className="text-[12px] font-semibold tracking-[0.15em] uppercase text-[#9CA3AF] mb-6">
                 Company
               </h4>
-              <ul className="space-y-3">
-                <li>
-                  <span className="text-sm font-medium text-slate-300 hover:text-white transition-colors cursor-pointer">
-                    About us
-                  </span>
-                </li>
-                <li>
-                  <span className="text-sm font-medium text-slate-300 hover:text-white transition-colors cursor-pointer">
-                    Our doctors
-                  </span>
-                </li>
-                <li>
-                  <a href="#contact-appointment-section" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <span className="text-sm font-medium text-slate-300 hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1.5">
-                    Careers
-                    <span className="bg-[#3B5BDB] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">Hiring</span>
-                  </span>
-                </li>
+              <ul className="flex flex-col items-start gap-3">
+                {["About us", "Our doctors", "Contact", "Careers"].map((item) => (
+                  <motion.li
+                    key={item}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <motion.span
+                      className="text-sm text-slate-300 inline-block cursor-pointer"
+                      whileHover={{ x: 2, color: "#ffffff" }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                    >
+                      {item}
+                    </motion.span>
+                  </motion.li>
+                ))}
               </ul>
-            </div>
+            </motion.div>
 
-            {/* COLUMN 4 — CONTACT */}
-            <div className="md:col-span-3 flex flex-col items-start text-left">
-              <h4 className="text-white text-xs font-bold tracking-wider uppercase mb-5">
+            {/* Column 4 — Contact */}
+            <motion.div
+              className="flex flex-col items-start text-left"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+              }}
+            >
+              <h4 className="text-[12px] font-semibold tracking-[0.15em] uppercase text-[#9CA3AF] mb-6">
                 Contact
               </h4>
-              <ul className="space-y-3.5 text-sm text-slate-300 font-medium">
-                <li className="flex items-start gap-2.5">
-                  <MapPin className="w-4.5 h-4.5 text-slate-500 shrink-0 mt-0.5" />
+              <ul className="flex flex-col items-start gap-3 text-sm text-slate-300">
+                <motion.li
+                  className="flex items-start gap-2.5"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <MapPin className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
                   <span>742 Evergreen Terrace, Medical District, NY 10021</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <User className="w-4.5 h-4.5 text-slate-500 shrink-0" />
+                </motion.li>
+                <motion.li
+                  className="flex items-center gap-2.5"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.05 }}
+                >
+                  <User className="w-4 h-4 text-slate-500 shrink-0" />
                   <span>+1 (555) 019-2834</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Mail className="w-4.5 h-4.5 text-slate-500 shrink-0" />
+                </motion.li>
+                <motion.li
+                  className="flex items-center gap-2.5"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                >
+                  <Mail className="w-4 h-4 text-slate-500 shrink-0" />
                   <span>care@salvamedic.com</span>
-                </li>
+                </motion.li>
               </ul>
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
-          {/* BOTTOM BAR */}
-          <div className="border-t border-slate-800 mt-[60px] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-            <span>© 2026 SalvaMedic. All rights reserved.</span>
-            <div className="flex items-center gap-4">
-              <span className="hover:text-slate-400 transition-colors cursor-pointer">Privacy Policy</span>
-              <span className="text-slate-700 select-none">|</span>
-              <span className="hover:text-slate-400 transition-colors cursor-pointer">Terms of Service</span>
+          {/* SECTION 4 — BOTTOM ROW */}
+          <motion.div
+            className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-16 pt-6 border-t border-white/10"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+          >
+            <span className="text-sm text-[#9CA3AF]">© 2026 SalvaMedic. All rights reserved.</span>
+            <div className="flex items-center gap-6 text-sm text-[#9CA3AF]">
+              <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
+              <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
             </div>
-          </div>
+          </motion.div>
 
         </div>
-      </footer>
+      </motion.footer>
 
       {/* REACTIVE MODAL FOR CHAT / BOOKING ENGAGEMENT */}
+      {/* VIDEO MODAL OVERLAY */}
+      {isVideoModalOpen && (
+        <div
+          onClick={() => setIsVideoModalOpen(false)}
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-apex-navy/70 backdrop-blur-sm animate-fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl animate-slide-up"
+          >
+            <button
+              onClick={() => setIsVideoModalOpen(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <video
+              src="https://res.cloudinary.com/dhkyla1rv/video/upload/v1780738055/clinic.mp4"
+              poster="/online-consulting image.jpeg"
+              controls
+              autoPlay
+              playsInline
+              className="w-full aspect-video object-cover"
+            />
+          </div>
+        </div>
+      )}
+
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-apex-navy/50 backdrop-blur-md animate-fade-in">
           
