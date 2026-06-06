@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent, useRef } from "react";
 import { motion } from "framer-motion";
+import Chatbot from "./components/Chatbot";
 import { 
   Smile, 
   Calendar, 
@@ -2542,6 +2543,8 @@ export default function App() {
 
         </div>
       )}
+
+      <Chatbot />
 
     </div>
   );
